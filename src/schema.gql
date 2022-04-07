@@ -2,6 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserObject {
+  id: ID!
+}
+
 type Query {
   isWorking: Boolean!
+  createUser(input: UserObjectInput!): String!
+  updateUser(userId: String!, input: UpdateUserObjectInput!): String!
+  deleteUser(userId: String!): String!
+  listUsers: [UserObject!]!
+}
+
+input UserObjectInput {
+  name: String!
+  location: UserLocationObjectInput!
+}
+
+input UserLocationObjectInput {
+  country: String!
+  city: String
+}
+
+input UpdateUserObjectInput {
+  name: String
+  location: UserLocationObjectInput
 }
