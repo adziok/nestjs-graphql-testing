@@ -2,8 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserLocationObject {
+  country: String!
+  city: String
+}
+
 type UserObject {
   id: ID!
+  name: String!
+  location: UserLocationObject!
+}
+
+input UserLocationObjectInput {
+  country: String!
+  city: String
 }
 
 type Query {
@@ -17,11 +29,6 @@ type Query {
 input UserObjectInput {
   name: String!
   location: UserLocationObjectInput!
-}
-
-input UserLocationObjectInput {
-  country: String!
-  city: String
 }
 
 input UpdateUserObjectInput {

@@ -23,7 +23,13 @@ export class UserObjectInput {
 export class UpdateUserObjectInput extends PartialType(UserObjectInput) {}
 
 @ObjectType()
-export class UserObject extends UserObjectInput {
+export class UserObject {
   @Field(() => ID)
   id: string;
+
+  @Field()
+  name: string;
+
+  @Field(() => UserLocationObject)
+  location: UserLocationObject;
 }
