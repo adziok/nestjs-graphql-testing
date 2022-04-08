@@ -1,4 +1,4 @@
-import { Args, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Query } from '@nestjs/graphql';
 import { UpdateUserObjectInput, UserObject, UserObjectInput } from './gql-dtos';
 import { AppService } from './app.service';
@@ -12,12 +12,12 @@ export class AppResolver {
     return true;
   }
 
-  @Query(() => String)
+  @Mutation(() => String)
   createUser(@Args('input') userDto: UserObjectInput): string {
     return this.appService.createUser(userDto);
   }
 
-  @Query(() => String)
+  @Mutation(() => String)
   updateUser(
     @Args('userId') userId: string,
     @Args('input') userDto: UpdateUserObjectInput,
@@ -25,7 +25,7 @@ export class AppResolver {
     return this.appService.updateUser(userId, userDto);
   }
 
-  @Query(() => String)
+  @Mutation(() => String)
   deleteUser(@Args('userId') userId: string): string {
     return this.appService.deleteUser(userId);
   }
