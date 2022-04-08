@@ -1,19 +1,12 @@
-import { INestApplication } from '@nestjs/common';
 import { createTestingApp } from './common/test-setup';
-import { SessionFactory } from './common/sesion-builder';
 import { Sdk } from './gql/queries';
 
 describe('AppController (e2e)', () => {
-  let app: INestApplication;
-  let sessionFactor: SessionFactory;
   let session: Sdk;
 
   beforeEach(async () => {
-    const { app: _app, sessionFactory: _sessionFactory } =
-      await createTestingApp();
-    app = _app;
-    sessionFactor = _sessionFactory;
-    session = await sessionFactor.create();
+    const { sessionFactory } = await createTestingApp();
+    session = await sessionFactory.create();
   });
 
   it('should create a user', async () => {

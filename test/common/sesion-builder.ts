@@ -26,8 +26,7 @@ const supertestFetch = (app: INestApplication) => {
       body: string;
     },
   ) => {
-    return request
-      .post(url)
+    return request[data.method.toLowerCase()](url)
       .set(data.headers)
       .send(JSON.parse(data.body))
       .then((response): Partial<Response> => {
