@@ -20,10 +20,13 @@ input UserLocationObjectInput {
 
 type Query {
   isWorking: Boolean!
+  listUsers: [UserObject!]!
+}
+
+type Mutation {
   createUser(input: UserObjectInput!): String!
   updateUser(userId: String!, input: UpdateUserObjectInput!): String!
   deleteUser(userId: String!): String!
-  listUsers: [UserObject!]!
 }
 
 input UserObjectInput {
