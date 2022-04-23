@@ -14,8 +14,21 @@ describe('AppController (e2e)', () => {
       input: {
         name: 'User1',
         location: {
-          country: 'Poland',
+          country: {
+            name: 'Poland',
+            code: 'Pl',
+          },
           city: 'Warsaw',
+        },
+        bestFriend: {
+          name: 'Tom',
+          location: {
+            country: {
+              name: 'Poland',
+              code: 'Pl',
+            },
+            city: 'Cracow',
+          },
         },
       },
     });
@@ -26,8 +39,21 @@ describe('AppController (e2e)', () => {
         expect.objectContaining({
           name: 'User1',
           location: {
-            country: 'Poland',
+            country: {
+              name: 'Poland',
+              code: 'Pl',
+            },
             city: 'Warsaw',
+          },
+          bestFriend: {
+            name: 'Tom',
+            location: {
+              country: {
+                name: 'Poland',
+                code: 'Pl',
+              },
+              city: 'Cracow',
+            },
           },
         }),
       ]),
@@ -39,8 +65,21 @@ describe('AppController (e2e)', () => {
       input: {
         name: 'User1',
         location: {
-          country: 'Poland',
+          country: {
+            name: 'Poland',
+            code: 'Pl',
+          },
           city: 'Warsaw',
+        },
+        bestFriend: {
+          name: 'Tom',
+          location: {
+            country: {
+              name: 'Poland',
+              code: 'Pl',
+            },
+            city: 'Cracow',
+          },
         },
       },
     });
@@ -57,8 +96,21 @@ describe('AppController (e2e)', () => {
         expect.objectContaining({
           name: 'UpdatedUser1',
           location: {
-            country: 'Poland',
+            country: {
+              name: 'Poland',
+              code: 'Pl',
+            },
             city: 'Warsaw',
+          },
+          bestFriend: {
+            name: 'Tom',
+            location: {
+              country: {
+                name: 'Poland',
+                code: 'Pl',
+              },
+              city: 'Cracow',
+            },
           },
         }),
       ]),
@@ -70,8 +122,21 @@ describe('AppController (e2e)', () => {
       input: {
         name: 'User1',
         location: {
-          country: 'Poland',
+          country: {
+            name: 'Poland',
+            code: 'Pl',
+          },
           city: 'Warsaw',
+        },
+        bestFriend: {
+          name: 'Tom',
+          location: {
+            country: {
+              name: 'Poland',
+              code: 'Pl',
+            },
+            city: 'Cracow',
+          },
         },
       },
     });

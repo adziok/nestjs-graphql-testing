@@ -2,20 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CountryObject {
+  name: String!
+  code: String!
+}
+
 type UserLocationObject {
-  country: String!
+  country: CountryObject!
   city: String
+}
+
+type UserBestFriendObject {
+  name: String!
+  location: UserLocationObject!
 }
 
 type UserObject {
   id: ID!
   name: String!
+  bestFriend: UserBestFriendObject!
   location: UserLocationObject!
 }
 
+input CountryObjectInput {
+  name: String!
+  code: String!
+}
+
 input UserLocationObjectInput {
-  country: String!
+  country: CountryObjectInput!
   city: String
+}
+
+input UserBestFriendObjectInput {
+  name: String!
+  location: UserLocationObjectInput!
 }
 
 type Query {
@@ -32,9 +53,11 @@ type Mutation {
 input UserObjectInput {
   name: String!
   location: UserLocationObjectInput!
+  bestFriend: UserBestFriendObjectInput!
 }
 
 input UpdateUserObjectInput {
   name: String
   location: UserLocationObjectInput
+  bestFriend: UserBestFriendObjectInput
 }
