@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "yarn test:generate-queries && jest --config ./test/jest-e2e.json",
-    "test:generate-queries": "gqlg --schemaFilePath ./src/schema.gql --destDirPath ./test/gql && graphql-codegen --config codegen.yml"
+    "test:generate-queries": "graphql-codegen --config codegen/codegen-generate-types.yml && graphql-codegen --config codegen/codegen.yml"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.0.8",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/introspection": "^2.1.1",
+    "@graphql-codegen/operations-document": "^1.0.0-alpha-17cc8e1de.0",
     "@graphql-codegen/typescript": "^2.4.8",
     "@graphql-codegen/typescript-graphql-request": "^4.4.5",
     "@graphql-codegen/typescript-operations": "^2.3.5",

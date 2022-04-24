@@ -1,0 +1,6 @@
+schema: src/schema.gql
+generates:
+  test/gql/operations.graphql:
+    schema: src/schema.gql
+    plugins:
+      - operations-document

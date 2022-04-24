@@ -1,5 +1,8 @@
 schema: src/schema.gql
-documents: 'test/gql/**/*.gql'
+documents:
+  - 'test/gql/operations.graphql':
+      loader: ./codegen/remove-suffix-document-loader.js
+
 generates:
   test/gql/queries.ts:
     plugins:
