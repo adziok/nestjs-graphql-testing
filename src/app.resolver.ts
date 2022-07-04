@@ -1,36 +1,43 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Query } from '@nestjs/graphql';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UpdateUserObjectInput, UserObject, UserObjectInput } from './gql-dtos';
 import { AppService } from './app.service';
 
-@Resolver()
+@Controller('app')
 export class AppResolver {
   constructor(private readonly appService: AppService) {}
 
-  @Query(() => Boolean)
+  @Get('isWorking')
   isWorking(): boolean {
     return true;
   }
 
-  @Mutation(() => String)
-  createUser(@Args('input') userDto: UserObjectInput): string {
+  @Post()
+  createUser(@Body('input') userDto: UserObjectInput): string {
     return this.appService.createUser(userDto);
   }
 
-  @Mutation(() => String)
+  @Put(':userId')
   updateUser(
-    @Args('userId') userId: string,
-    @Args('input') userDto: UpdateUserObjectInput,
+    @Param('userId') userId: string,
+    @Body('input') userDto: UpdateUserObjectInput,
   ): string {
     return this.appService.updateUser(userId, userDto);
   }
 
-  @Mutation(() => String)
-  deleteUser(@Args('userId') userId: string): string {
+  @Delete(':userId')
+  deleteUser(@Param('userId') userId: string): string {
     return this.appService.deleteUser(userId);
   }
 
-  @Query(() => [UserObject])
+  @Get()
   listUsers(): UserObject[] {
     return this.appService.listUsers();
   }
