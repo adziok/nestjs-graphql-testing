@@ -1,18 +1,21 @@
-import { GraphQLClient } from 'graphql-request';
 import { INestApplication } from '@nestjs/common';
-import { getSdk } from '../gql/queries';
 import { agent } from 'supertest';
 import { Response, Headers } from 'node-fetch';
+import * as api from '../temp/sdk';
+
+export type UserActions = typeof api;
 
 export class SessionFactory {
   constructor(private app: INestApplication) {}
 
   async create() {
-    const graphQLClient = new GraphQLClient('/graphql', {
-      fetch: supertestFetch(this.app),
-    });
-    graphQLClient.setHeader('Authorization', 'verifySecondFactor.accessToken');
-    return getSdk(graphQLClient);
+    api.defaults.headers = {
+      access_token: 'secret',
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    api.defaults.fetch = supertestFetch(this.app);
+    return api;
   }
 }
 
@@ -26,9 +29,9 @@ const supertestFetch = (app: INestApplication) => {
       body: string;
     },
   ) => {
-    return request[data.method.toLowerCase()](url)
+    return request[data.method?.toLowerCase() || 'get'](url)
       .set(data.headers)
-      .send(JSON.parse(data.body))
+      .send(data.body && JSON.parse(data.body))
       .then((response): Partial<Response> => {
         return {
           text: () => Promise.resolve(response.text),
