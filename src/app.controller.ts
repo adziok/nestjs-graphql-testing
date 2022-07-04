@@ -21,13 +21,11 @@ export class AppController {
   }
 
   @Post()
-  @ApiBody({ type: UserObjectInput })
   createUser(@Body() userDto: UserObjectInput): string {
     return this.appService.createUser(userDto);
   }
 
   @Put(':userId')
-  @ApiBody({ type: UserObjectInput })
   updateUser(
     @Param('userId') userId: string,
     @Body() userDto: UserObjectInput,
