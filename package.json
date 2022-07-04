@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build:open-api": "ts-node src/generate-open-api.ts",
+    "build:open-api-spec": "nest start --entryFile generate-open-api",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -19,8 +19,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "yarn test:generate-queries && jest --config ./test/jest-e2e.json",
-    "test:generate-queries": "gqlg --schemaFilePath ./src/schema.gql --destDirPath ./test/gql && graphql-codegen --config codegen.yml"
+    "test:e2e": "yarn test:generate-sdk && jest --config ./test/jest-e2e.json",
+    "test:build-test-sdk": "oazapfts open-api.json test/temp/sdk.ts",
+    "test:generate-sdk": "yarn build:open-api-spec && yarn test:build-test-sdk"
   },
   "dependencies": {
     "@nestjs/common": "^8.4.7",
@@ -47,6 +48,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.2",
+    "oazapfts": "^3.6.0",
     "prettier": "^2.7.1",
     "source-map-support": "^0.5.20",
     "supertest": "^6.2.4",
