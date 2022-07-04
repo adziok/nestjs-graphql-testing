@@ -8,8 +8,6 @@ export class UserObjectInput {
   location: UserLocationObject;
 }
 
-export class UpdateUserObjectInput extends UserObjectInput {}
-
 export class UserObject {
   id: string;
   name: string;
