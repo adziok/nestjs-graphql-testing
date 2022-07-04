@@ -1,8 +1,8 @@
 import { createTestingApp } from './common/test-setup';
-import { Sdk } from './gql/queries';
+import { UserActions } from './common/sesion-builder';
 
 describe('AppController (e2e)', () => {
-  let session: Sdk;
+  let session: UserActions;
 
   beforeEach(async () => {
     const { sessionFactory } = await createTestingApp();
@@ -10,18 +10,16 @@ describe('AppController (e2e)', () => {
   });
 
   it('should create a user', async () => {
-    await session.createUser({
-      input: {
-        name: 'User1',
-        location: {
-          country: 'Poland',
-          city: 'Warsaw',
-        },
+    await session.appControllerCreateUser({
+      name: 'User1',
+      location: {
+        country: 'Poland',
+        city: 'Warsaw',
       },
     });
-    const { listUsers } = await session.listUsers();
+    const { data } = await session.appControllerListUsers();
 
-    expect(listUsers).toEqual(
+    expect(data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           name: 'User1',
@@ -35,24 +33,23 @@ describe('AppController (e2e)', () => {
   });
 
   it('should update a user', async () => {
-    const { createUser } = await session.createUser({
-      input: {
-        name: 'User1',
-        location: {
-          country: 'Poland',
-          city: 'Warsaw',
-        },
+    const { data: userId } = await session.appControllerCreateUser({
+      name: 'User1',
+      location: {
+        country: 'Poland',
+        city: 'Warsaw',
       },
     });
-    await session.updateUser({
-      input: {
-        name: 'UpdatedUser1',
+    await session.appControllerUpdateUser(userId, {
+      name: 'UpdatedUser1',
+      location: {
+        country: 'Poland',
+        city: 'Warsaw',
       },
-      userId: createUser,
     });
-    const { listUsers } = await session.listUsers();
+    const { data } = await session.appControllerListUsers();
 
-    expect(listUsers).toEqual(
+    expect(data).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           name: 'UpdatedUser1',
@@ -66,20 +63,16 @@ describe('AppController (e2e)', () => {
   });
 
   it('should delete a user', async () => {
-    const { createUser } = await session.createUser({
-      input: {
-        name: 'User1',
-        location: {
-          country: 'Poland',
-          city: 'Warsaw',
-        },
+    const { data: userId } = await session.appControllerCreateUser({
+      name: 'User1',
+      location: {
+        country: 'Poland',
+        city: 'Warsaw',
       },
     });
-    await session.deleteUser({
-      userId: createUser,
-    });
-    const { listUsers } = await session.listUsers();
+    await session.appControllerDeleteUser(userId);
+    const { data } = await session.appControllerListUsers();
 
-    expect(listUsers.length).toEqual(0);
+    expect(data.length).toEqual(0);
   });
 });
