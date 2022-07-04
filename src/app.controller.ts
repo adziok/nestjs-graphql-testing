@@ -11,7 +11,7 @@ import { UpdateUserObjectInput, UserObject, UserObjectInput } from './gql-dtos';
 import { AppService } from './app.service';
 
 @Controller('app')
-export class AppResolver {
+export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('isWorking')
