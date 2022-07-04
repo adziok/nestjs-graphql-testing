@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { UpdateUserObjectInput, UserObject, UserObjectInput } from './gql-dtos';
+import { UpdateUserObjectInput, UserObject, UserObjectInput } from './dtos';
 import { AppService } from './app.service';
 
 @Controller('app')

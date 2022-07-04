@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { UserObject, UserObjectInput } from './gql-dtos';
+import { UserObject, UserObjectInput } from './dtos';
 
 @Injectable()
 export class AppService {
