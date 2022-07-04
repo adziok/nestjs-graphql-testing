@@ -22,7 +22,7 @@ export class AppController {
 
   @Post()
   @ApiBody({ type: UserObjectInput })
-  createUser(@Body('input') userDto: UserObjectInput): string {
+  createUser(@Body() userDto: UserObjectInput): string {
     return this.appService.createUser(userDto);
   }
 
@@ -30,7 +30,7 @@ export class AppController {
   @ApiBody({ type: UserObjectInput })
   updateUser(
     @Param('userId') userId: string,
-    @Body('input') userDto: UserObjectInput,
+    @Body() userDto: UserObjectInput,
   ): string {
     return this.appService.updateUser(userId, userDto);
   }
