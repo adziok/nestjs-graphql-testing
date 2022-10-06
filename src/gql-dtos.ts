@@ -1,5 +1,7 @@
 import { Field, ID, InputType, ObjectType, PartialType } from '@nestjs/graphql';
 
+
+
 @InputType('UserLocationObjectInput')
 @ObjectType()
 export class UserLocationObject {
@@ -32,4 +34,22 @@ export class UserObject {
 
   @Field(() => UserLocationObject)
   location: UserLocationObject;
+}
+
+@ObjectType()
+export class UserCreatedNotification {
+  @Field(() => ID)
+  id: string;
+}
+
+@ObjectType()
+export class UserDeletedNotification {
+  @Field(() => ID)
+  id: string;
+}
+
+@InputType()
+export class UserCreatedSubscriptionInput  {
+  @Field()
+  onlyIfNameContains: string
 }

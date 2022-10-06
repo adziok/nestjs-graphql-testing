@@ -1,11 +1,37 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Query } from '@nestjs/graphql';
-import { UpdateUserObjectInput, UserObject, UserObjectInput } from './gql-dtos';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import {
+  UpdateUserObjectInput,
+  UserCreatedSubscriptionInput,
+  UserDeletedNotification,
+  UserObject,
+  UserObjectInput,
+} from './gql-dtos';
 import { AppService } from './app.service';
+import {
+  pubSub,
+  USER_CREATED_SUB,
+  USER_REMOVED_SUB,
+} from './subscriptions-consts';
 
 @Resolver()
 export class AppResolver {
   constructor(private readonly appService: AppService) {}
+
+  @Subscription(() => UserObject, {
+    filter: (
+      payload: UserObject,
+      variables: { filter: UserCreatedSubscriptionInput },
+    ) => payload.name.includes(variables.filter.onlyIfNameContains),
+    resolve: (payload) => payload,
+  })
+  userCreated(@Args('filter') filter: UserCreatedSubscriptionInput) {
+    return pubSub.asyncIterator(USER_CREATED_SUB);
+  }
+
+  @Subscription(() => UserDeletedNotification)
+  userDeleted() {
+    return pubSub.asyncIterator(USER_REMOVED_SUB);
+  }
 
   @Query(() => Boolean)
   isWorking(): boolean {
@@ -13,7 +39,7 @@ export class AppResolver {
   }
 
   @Mutation(() => String)
-  createUser(@Args('input') userDto: UserObjectInput): string {
+  createUser(@Args('input') userDto: UserObjectInput): Promise<string> {
     return this.appService.createUser(userDto);
   }
 

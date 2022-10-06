@@ -10,6 +10,10 @@ import { AppResolver } from './app.resolver';
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': {},
+      },
     }),
   ],
   providers: [AppService, AppResolver],
