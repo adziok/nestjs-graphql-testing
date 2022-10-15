@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "yarn test:generate-queries && jest --config ./test/jest-e2e.json",
-    "test:generate-queries": "gqlg --schemaFilePath ./src/schema.gql --destDirPath ./test/gql && graphql-codegen --config codegen.yml"
+    "test:generate-subscriptions-as-ts": "node scripts/generate-subscriptions-queries-type.js test/gql/subscriptions",
+    "test:generate-queries": "gqlg --schemaFilePath ./src/schema.gql --destDirPath ./test/gql && yarn test:generate-subscriptions-as-ts && graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.1.3",

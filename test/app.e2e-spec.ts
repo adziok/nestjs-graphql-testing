@@ -1,12 +1,22 @@
 import { createTestingApp } from './common/test-setup';
-import { Sdk } from './gql/queries';
+import { SessionSdk } from './common/sesion-builder';
+import { INestApplication } from '@nestjs/common';
+import { promisify } from 'util';
+
+const sleep = promisify(setTimeout);
 
 describe('AppController (e2e)', () => {
-  let session: Sdk;
+  let session: SessionSdk;
+  let app: INestApplication;
 
   beforeEach(async () => {
-    const { sessionFactory } = await createTestingApp();
+    const { sessionFactory, app: _app } = await createTestingApp();
     session = await sessionFactory.create();
+    app = _app;
+  });
+
+  afterEach(async () => {
+    await app.close();
   });
 
   it('should create a user', async () => {
@@ -21,6 +31,40 @@ describe('AppController (e2e)', () => {
     });
     const { listUsers } = await session.listUsers();
 
+    expect(listUsers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'User1',
+          location: {
+            country: 'Poland',
+            city: 'Warsaw',
+          },
+        }),
+      ]),
+    );
+  });
+
+  it('sub', async () => {
+    (
+      await session.userCreated({ filter: { onlyIfNameContains: 'a' } })
+    ).userCreated.session.subscriptions.userCreated(
+      { filter: { onlyIfNameContains: 'User' } },
+      (v) => {
+        console.log(v);
+      },
+    );
+
+    await session.createUser({
+      input: {
+        name: 'User1',
+        location: {
+          country: 'Poland',
+          city: 'Warsaw',
+        },
+      },
+    });
+    const { listUsers } = await session.listUsers();
+    await sleep(1000);
     expect(listUsers).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
