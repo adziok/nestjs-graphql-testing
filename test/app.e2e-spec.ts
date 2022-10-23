@@ -44,40 +44,6 @@ describe('AppController (e2e)', () => {
     );
   });
 
-  it('sub', async () => {
-    (
-      await session.userCreated({ filter: { onlyIfNameContains: 'a' } })
-    ).userCreated.session.subscriptions.userCreated(
-      { filter: { onlyIfNameContains: 'User' } },
-      (v) => {
-        console.log(v);
-      },
-    );
-
-    await session.createUser({
-      input: {
-        name: 'User1',
-        location: {
-          country: 'Poland',
-          city: 'Warsaw',
-        },
-      },
-    });
-    const { listUsers } = await session.listUsers();
-    await sleep(1000);
-    expect(listUsers).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: 'User1',
-          location: {
-            country: 'Poland',
-            city: 'Warsaw',
-          },
-        }),
-      ]),
-    );
-  });
-
   it('should update a user', async () => {
     const { createUser } = await session.createUser({
       input: {

@@ -28,11 +28,6 @@ export class AppResolver {
     return pubSub.asyncIterator(USER_CREATED_SUB);
   }
 
-  @Subscription(() => UserDeletedNotification)
-  userDeleted() {
-    return pubSub.asyncIterator(USER_REMOVED_SUB);
-  }
-
   @Query(() => Boolean)
   isWorking(): boolean {
     return true;

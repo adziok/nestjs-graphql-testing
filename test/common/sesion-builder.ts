@@ -2,15 +2,32 @@ import { GraphQLClient } from 'graphql-request';
 import { INestApplication } from '@nestjs/common';
 import { getSdk, Sdk } from '../gql/queries';
 import { agent } from 'supertest';
-import { Response, Headers } from 'node-fetch';
+import { Headers, Response } from 'node-fetch';
 import { createClient } from 'graphql-ws';
 import * as ws from 'ws';
 import { SubscriptionsQueries } from '../gql/subscriptions/subscriptions';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Resolve<T> = T extends Function ? T : { [K in keyof T]: T[K] };
+export type UnPromise<T extends Promise<any>> = T extends Promise<infer U>
+  ? U
+  : never;
 
-export type SessionSdk = Sdk & { subscriptions: SubscriptionWsSdk };
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Resolve<T> = T extends Function ? T : { [K in keyof T]: T[K] };
+
+type SubscriptionsRestSdk = Pick<Sdk, keyof typeof SubscriptionsQueries>;
+
+type SubscriptionWsSdk = Resolve<{
+  [K in keyof SubscriptionsRestSdk]: (
+    param: Parameters<SubscriptionsRestSdk[K]>[0],
+    cb: (
+      type: UnPromise<ReturnType<SubscriptionsRestSdk[K]>>,
+      error: unknown,
+    ) => void | Promise<void>,
+  ) => void;
+}>;
+
+export type SessionSdk = Omit<Sdk, keyof typeof SubscriptionsQueries> &
+  SubscriptionWsSdk;
 
 export class SessionFactory {
   constructor(private app: INestApplication) {}
@@ -24,10 +41,10 @@ export class SessionFactory {
     const sdk = getSdk(graphQLClient);
     return {
       ...sdk,
-      subscriptions: await getSubscriptionWsSdk(
+      ...(await getSubscriptionWsSdk(
         `ws://localhost:${this.app.getHttpServer().address().port}${gqlSuffix}`,
-      ),
-    } as unknown as SessionSdk;
+      )),
+    };
   }
 }
 
@@ -78,24 +95,6 @@ const createGqlSubscriptionClient = (url: string, authToken: string) => {
   });
 };
 
-type SubscriptionNames = keyof typeof SubscriptionsQueries;
-
-type SubscriptionsRestSdk = Pick<Sdk, SubscriptionNames>;
-
-type FirstArgumentType<F extends (...params: unknown[]) => unknown> =
-  F extends (args: infer A) => any ? A : never;
-
-type SubscriptionWsSdk = Resolve<{
-  [K in keyof SubscriptionsRestSdk]: (
-    param: FirstArgumentType<SubscriptionsRestSdk[K]>,
-    cb: (
-      type: Unpromise<ReturnType<SubscriptionsRestSdk[K]>>,
-    ) => void | Promise<void>,
-  ) => void;
-}>;
-
-type Unpromise<T extends Promise<any>> = T extends Promise<infer U> ? U : never;
-
 async function getSubscriptionWsSdk(url: string): Promise<SubscriptionWsSdk> {
   const client = createGqlSubscriptionClient(url, '');
   const waitForConnection = () => new Promise((r) => client.on('connected', r));
@@ -116,10 +115,10 @@ async function getSubscriptionWsSdk(url: string): Promise<SubscriptionWsSdk> {
               callback(value.data);
             },
             error(error: unknown) {
-              throw error;
+              callback(null, error);
             },
             complete() {
-              console.log('done');
+              return;
             },
           },
         );

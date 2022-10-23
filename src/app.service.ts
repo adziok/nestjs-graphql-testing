@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { UserObject, UserObjectInput } from './gql-dtos';
-import {pubSub, USER_CREATED_SUB} from "./subscriptions-consts";
+import { pubSub, USER_CREATED_SUB } from './subscriptions-consts';
 
 @Injectable()
 export class AppService {
@@ -11,7 +11,7 @@ export class AppService {
     const id = randomUUID();
     this.users.set(id, { ...userDto, id });
 
-    await pubSub.publish(USER_CREATED_SUB, { ...userDto, id })
+    await pubSub.publish(USER_CREATED_SUB, { ...userDto, id });
     return id;
   }
 
