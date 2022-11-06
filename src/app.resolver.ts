@@ -2,16 +2,11 @@ import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import {
   UpdateUserObjectInput,
   UserCreatedSubscriptionInput,
-  UserDeletedNotification,
   UserObject,
   UserObjectInput,
 } from './gql-dtos';
 import { AppService } from './app.service';
-import {
-  pubSub,
-  USER_CREATED_SUB,
-  USER_REMOVED_SUB,
-} from './subscriptions-consts';
+import { pubSub, USER_CREATED_SUB } from './subscriptions-consts';
 
 @Resolver()
 export class AppResolver {

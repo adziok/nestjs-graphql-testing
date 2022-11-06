@@ -1,9 +1,6 @@
 import { createTestingApp } from './common/test-setup';
 import { SessionSdk } from './common/sesion-builder';
 import { INestApplication } from '@nestjs/common';
-import { promisify } from 'util';
-
-const sleep = promisify(setTimeout);
 
 describe('AppController (e2e)', () => {
   let session: SessionSdk;

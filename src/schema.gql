@@ -13,10 +13,6 @@ type UserObject {
   location: UserLocationObject!
 }
 
-type UserDeletedNotification {
-  id: ID!
-}
-
 input UserLocationObjectInput {
   country: String!
   city: String
@@ -45,7 +41,6 @@ input UpdateUserObjectInput {
 
 type Subscription {
   userCreated(filter: UserCreatedSubscriptionInput!): UserObject!
-  userDeleted: UserDeletedNotification!
 }
 
 input UserCreatedSubscriptionInput {
